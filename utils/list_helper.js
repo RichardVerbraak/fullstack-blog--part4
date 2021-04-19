@@ -8,4 +8,6 @@ const totalLikes = (blogs) => {
 	}, 0)
 }
 
-module.exports = { dummy, totalLikes }
+const favoriteBlog = () => {}
+
+module.exports = { dummy, totalLikes, favoriteBlog }

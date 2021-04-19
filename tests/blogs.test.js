@@ -7,7 +7,7 @@ test('dummy returns one', () => {
 	expect(result).toBe(1)
 })
 
-test('Total of likes in an array of blogs', () => {
+describe('total likes', () => {
 	const blogs = [
 		{
 			title: 'At the Mountains of Madness',
@@ -23,5 +23,7 @@ test('Total of likes in an array of blogs', () => {
 		},
 	]
 
-	expect(totalLikes(blogs)).toBe(10)
+	test('of an array with two blogs', () => {
+		expect(totalLikes(blogs)).toBe(10)
+	})
 })
