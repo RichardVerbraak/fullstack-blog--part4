@@ -44,5 +44,5 @@ test('Blog with the most likes', () => {
 		},
 	]
 
-	expect(favoriteBlog(blogs)).toBe(6)
+	expect(favoriteBlog(blogs)).toEqual(6)
 })
