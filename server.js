@@ -1,19 +1,15 @@
 const http = require('http')
 const express = require('express')
+const connectDB = require('./config/db')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const blogRoutes = require('./routes/blogRoutes')
 
-dotenv.config()
-
 const app = express()
 
-// mongoose.connect(process.env.MONGO_URI, {
-// 	useNewUrlParser: true,
-// 	useUnifiedTopology: true,
-// 	useFindAndModify: false,
-// 	useCreateIndex: true,
-// })
+dotenv.config()
+
+connectDB()
 
 app.use(cors())
 app.use(express.json())
