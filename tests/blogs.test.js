@@ -28,21 +28,23 @@ describe('total likes', () => {
 	})
 })
 
-test('Blog with the most likes', () => {
-	const blogs = [
-		{
-			title: 'At the Mountains of Madness',
-			author: 'H.P. Lovecraft',
-			url: 'something.something.com',
-			likes: 4,
-		},
-		{
-			title: 'Dagon',
-			author: 'H.P. Lovecraft',
-			url: 'something.something.com',
-			likes: 6,
-		},
-	]
+describe('Find the most liked blog', () => {
+	test('out of 2 blogs', () => {
+		const blogs = [
+			{
+				title: 'At the Mountains of Madness',
+				author: 'H.P. Lovecraft',
+				url: 'something.something.com',
+				likes: 4,
+			},
+			{
+				title: 'Dagon',
+				author: 'H.P. Lovecraft',
+				url: 'something.something.com',
+				likes: 6,
+			},
+		]
 
-	expect(favoriteBlog(blogs)).toEqual(6)
+		expect(favoriteBlog(blogs)).toEqual(6)
+	})
 })
