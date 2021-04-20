@@ -9,9 +9,9 @@ const connectDB = async () => {
 			useCreateIndex: true,
 		})
 
-		console.log('connected')
+		if (process.env.NODE_ENV === 'development') console.log('connected')
 	} catch (error) {
-		console.error(error)
+		if (process.env.NODE_ENV === 'development') console.error(error)
 	}
 }
 

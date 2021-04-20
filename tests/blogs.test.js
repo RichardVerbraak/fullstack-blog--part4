@@ -1,9 +1,37 @@
 const app = require('../server')
 const supertest = require('supertest')
+const Blog = require('../models/blogModel')
 const { dummy, totalLikes, favoriteBlog } = require('../utils/list_helper')
 const mongoose = require('mongoose')
 
 const api = supertest(app)
+
+const blogs = [
+	{
+		title: 'At the Mountains of Madness',
+		author: 'H.P. Lovecraft',
+		url: 'something.something.com',
+		likes: 4,
+	},
+	{
+		title: 'Dagon',
+		author: 'H.P. Lovecraft',
+		url: 'something.something.com',
+		likes: 6,
+	},
+	{
+		title: 'Baptism of Fire',
+		author: 'Andrzej Sapkowski',
+		url: 'something.something.com',
+		likes: 10,
+	},
+]
+
+beforeEach(async () => {
+	await Blog.deleteMany({})
+
+	await Blog.insertMany(blogs)
+})
 
 test('blogs are returned as json', async () => {
 	await api
@@ -14,7 +42,7 @@ test('blogs are returned as json', async () => {
 
 test('blogs has a length of 3', async () => {
 	const res = await api.get('/api/blogs')
-	expect(res.body).toHaveLength(2)
+	expect(res.body).toHaveLength(3)
 })
 
 test('dummy returns one', () => {
