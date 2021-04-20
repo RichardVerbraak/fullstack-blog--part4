@@ -36,16 +36,18 @@ beforeEach(async () => {
 	await Blog.insertMany(blogs)
 })
 
-test('blogs are returned as json', async () => {
-	await api
-		.get('/api/blogs')
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
-})
+describe('MongoDB test blogs', () => {
+	test('are returned as json', async () => {
+		await api
+			.get('/api/blogs')
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+	})
 
-test('blogs has a length of 3', async () => {
-	const res = await api.get('/api/blogs')
-	expect(res.body).toHaveLength(3)
+	test('have a length of 3 blogs', async () => {
+		const res = await api.get('/api/blogs')
+		expect(res.body).toHaveLength(3)
+	})
 })
 
 test('dummy returns one', () => {
