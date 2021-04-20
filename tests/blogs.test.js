@@ -1,4 +1,16 @@
+const app = require('../server')
+const supertest = require('supertest')
 const { dummy, totalLikes, favoriteBlog } = require('../utils/list_helper')
+const mongoose = require('mongoose')
+
+const api = supertest(app)
+
+test('blogs are returned as json', async () => {
+	await api
+		.get('/api/blogs')
+		.expect(200)
+		.expect('Content-Type', /application\/json/)
+})
 
 test('dummy returns one', () => {
 	const blogs = []
@@ -29,7 +41,7 @@ describe('total likes', () => {
 })
 
 describe('Find the most liked blog', () => {
-	test('out of 2 blogs', () => {
+	test('out of 3 blogs', () => {
 		const blogs = [
 			{
 				title: 'At the Mountains of Madness',
@@ -43,8 +55,18 @@ describe('Find the most liked blog', () => {
 				url: 'something.something.com',
 				likes: 6,
 			},
+			{
+				title: 'Baptism of Fire',
+				author: 'Andrzej Sapkowski',
+				url: 'something.something.com',
+				likes: 10,
+			},
 		]
 
-		expect(favoriteBlog(blogs)).toEqual(6)
+		expect(favoriteBlog(blogs)).toEqual(10)
 	})
+})
+
+afterAll(() => {
+	mongoose.connection.close()
 })
