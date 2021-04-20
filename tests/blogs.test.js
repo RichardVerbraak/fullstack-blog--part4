@@ -1,8 +1,9 @@
 const app = require('../server')
 const supertest = require('supertest')
+const mongoose = require('mongoose')
+
 const Blog = require('../models/blogModel')
 const { dummy, totalLikes, favoriteBlog } = require('../utils/list_helper')
-const mongoose = require('mongoose')
 
 const api = supertest(app)
 
@@ -28,8 +29,10 @@ const blogs = [
 ]
 
 beforeEach(async () => {
+	// Delete previous documents
 	await Blog.deleteMany({})
 
+	// Add seeder data to test
 	await Blog.insertMany(blogs)
 })
 
