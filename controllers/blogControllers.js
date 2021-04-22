@@ -3,7 +3,7 @@ const Blog = require('../models/blogModel')
 const getAllBlogs = async (req, res) => {
 	const blogs = await Blog.find({})
 
-	res.json(blogs)
+	res.send(blogs)
 }
 
 const addNewBlog = async (req, res) => {
