@@ -69,7 +69,7 @@ test('Adds a new blog to MongoDB', async () => {
 	expect(res.body).toHaveLength(4)
 })
 
-test('check if the likes prop defaults to 0 when missing', async () => {
+test('if the likes prop defaults to 0 when missing', async () => {
 	const newBlog = {
 		title: 'Blood of Elves',
 		author: 'Andrzej Sapkowski',
@@ -80,6 +80,15 @@ test('check if the likes prop defaults to 0 when missing', async () => {
 
 	const res = await api.get('/api/blogs')
 	expect(res.body[3].likes).toBe(0)
+})
+
+test('for 400 Bad Request when title and url props are missing', async () => {
+	const newBlog = {
+		author: 'Andrzej Sapkowski',
+		likes: 23,
+	}
+
+	await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
 test('dummy returns one', () => {

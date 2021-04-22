@@ -6,12 +6,18 @@ const getAllBlogs = async (req, res) => {
 	res.send(blogs)
 }
 
-const addNewBlog = async (req, res) => {
-	const blog = new Blog(req.body)
+const addNewBlog = async (req, res, next) => {
+	const { title, author, url, likes } = req.body
 
-	await blog.save()
+	const blog = new Blog({ title, author, url, likes })
 
-	res.status(201).json(blog)
+	try {
+		await blog.save()
+		res.status(201).json(blog)
+	} catch (error) {
+		res.status(400)
+		next(error)
+	}
 }
 
 module.exports = { getAllBlogs, addNewBlog }
