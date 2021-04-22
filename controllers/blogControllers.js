@@ -8,10 +8,10 @@ const getAllBlogs = async (req, res) => {
 }
 
 const addNewBlog = (req, res) => {
-	const blog = new Blog(request.body)
+	const blog = new Blog(req.body)
 
 	await blog.save()
-	
+
 	response.status(201).json(blog)
 }
 
