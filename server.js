@@ -1,5 +1,5 @@
-const http = require('http')
 const express = require('express')
+const http = require('http')
 const connectDB = require('./config/db')
 const cors = require('cors')
 const dotenv = require('dotenv')
@@ -18,8 +18,14 @@ app.use('/api/blogs', blogRoutes)
 
 const PORT = process.env.PORT || 3003
 
-app.listen(PORT, () => {
-	console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+const server = http.createServer(app)
+
+server.listen(PORT, () => {
+	if (process.env.NODE_ENV !== 'test') {
+		console.log(
+			`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+		)
+	}
 })
 
-module.exports = app
+module.exports = server

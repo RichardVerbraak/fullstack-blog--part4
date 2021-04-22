@@ -107,4 +107,5 @@ describe('Find the most liked blog', () => {
 
 afterAll(() => {
 	mongoose.connection.close()
+	app.close()
 })
