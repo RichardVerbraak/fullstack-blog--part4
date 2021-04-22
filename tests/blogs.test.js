@@ -69,6 +69,19 @@ test('Adds a new blog to MongoDB', async () => {
 	expect(res.body).toHaveLength(4)
 })
 
+test('check if the likes prop defaults to 0 when missing', async () => {
+	const newBlog = {
+		title: 'Blood of Elves',
+		author: 'Andrzej Sapkowski',
+		url: 'something.something.com',
+	}
+
+	await api.post('/api/blogs').send(newBlog)
+
+	const res = await api.get('/api/blogs')
+	expect(res.body[3].likes).toBe(0)
+})
+
 test('dummy returns one', () => {
 	const blogs = []
 
