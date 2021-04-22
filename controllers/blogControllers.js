@@ -11,7 +11,7 @@ const addNewBlog = async (req, res) => {
 
 	await blog.save()
 
-	response.status(201).json(blog)
+	res.status(201).json(blog)
 }
 
 module.exports = { getAllBlogs, addNewBlog }

@@ -36,7 +36,7 @@ beforeEach(async () => {
 	await Blog.insertMany(blogs)
 })
 
-describe('MongoDB test blogs', () => {
+describe('MongoDB blog(s)', () => {
 	test('are returned as json', async () => {
 		await api
 			.get('/api/blogs')
@@ -44,10 +44,24 @@ describe('MongoDB test blogs', () => {
 			.expect('Content-Type', /application\/json/)
 	})
 
-	test('have a length of 3 blogs', async () => {
+	test('have a length of 3', async () => {
 		const res = await api.get('/api/blogs')
 		expect(res.body).toHaveLength(3)
 	})
+})
+
+test('Adds a new blog to MongoDB', async () => {
+	const newBlog = {
+		title: 'Season of Storms',
+		author: 'Andrzej Sapkowski',
+		url: 'something.something.com',
+		likes: 3,
+	}
+
+	await api.post('/api/blogs').send(newBlog).expect(201)
+
+	const res = await api.get('/api/blogs')
+	expect(res.body).toHaveLength(4)
 })
 
 test('dummy returns one', () => {
