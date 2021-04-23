@@ -20,4 +20,17 @@ const addNewBlog = async (req, res, next) => {
 	}
 }
 
-module.exports = { getAllBlogs, addNewBlog }
+const deleteBlog = async (req, res, next) => {
+	const id = req.params.id
+
+	try {
+		const deletedBlog = await Blog.findByIdAndDelete(id)
+		res.status(204)
+		res.send(deletedBlog)
+	} catch (error) {
+		res.status(400)
+		next(error)
+	}
+}
+
+module.exports = { getAllBlogs, addNewBlog, deleteBlog }
