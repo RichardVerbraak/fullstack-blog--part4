@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const mongoose = require('mongoose')
 
 const User = require('../models/userModel')
+const { deleteOne } = require('../models/userModel')
 
 const api = supertest(app)
 
@@ -27,7 +28,15 @@ test('user will be created', async () => {
 })
 
 test('invalid user will not be created', async () => {
-	await api.post('/api/users').send(invalidUser).expect(400)
+	await api
+		.post('/api/users')
+		.send(invalidUser)
+		.expect(400)
+		.then((res) => {
+			expect(res.body.message).toBe(
+				'User validation failed: password: Path `password` (`hh`) is shorter than the minimum allowed length (3).'
+			)
+		})
 })
 
 afterAll(() => {
