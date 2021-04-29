@@ -5,6 +5,7 @@ const createUser = async (req, res) => {
 		const { username, name, password } = req.body
 
 		const user = await User.create({ username, name, password })
+
 		res.send(user)
 	} catch (error) {
 		console.error(error)
