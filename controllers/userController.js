@@ -1,6 +1,6 @@
 const User = require('../models/userModel.js')
 
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
 	try {
 		const { username, name, password } = req.body
 
@@ -8,7 +8,8 @@ const createUser = async (req, res) => {
 
 		res.send(user)
 	} catch (error) {
-		console.error(error)
+		res.status(400)
+		next(error)
 	}
 }
 
@@ -19,6 +20,7 @@ const getAllUsers = async (req, res) => {
 		res.status(200)
 		res.send(users)
 	} catch (error) {
+		res.json(error)
 		console.error(error)
 	}
 }

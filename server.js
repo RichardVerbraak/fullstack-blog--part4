@@ -5,6 +5,7 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const blogRoutes = require('./routes/blogRoutes')
 const userRoutes = require('./routes/userRoutes')
+const errorHandler = require('./middleware/errorMiddleware')
 
 const app = express()
 
@@ -17,6 +18,8 @@ app.use(express.json())
 
 app.use('/api/blogs', blogRoutes)
 app.use('/api/users', userRoutes)
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3003
 
