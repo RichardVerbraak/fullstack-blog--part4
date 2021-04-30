@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const blogRoutes = require('./routes/blogRoutes')
 const userRoutes = require('./routes/userRoutes')
 const errorHandler = require('./middleware/errorMiddleware')
+const tokenExtractor = require('./middleware/tokenMiddleware')
 
 const app = express()
 
@@ -16,6 +17,7 @@ connectDB()
 app.use(cors())
 app.use(express.json())
 
+app.use(tokenExtractor)
 app.use('/api/blogs', blogRoutes)
 app.use('/api/users', userRoutes)
 

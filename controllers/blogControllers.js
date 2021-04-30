@@ -17,35 +17,21 @@ const addNewBlog = async (req, res, next) => {
 	try {
 		const { title, author, url, likes } = req.body
 
-		let token
+		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
 
-		if (
-			req.headers.authorization &&
-			req.headers.authorization.startsWith('Bearer')
-		) {
-			try {
-				token = req.headers.authorization.split(' ')[1]
+		const user = await User.findById(decoded.id)
 
-				const decoded = jwt.verify(token, process.env.TOKEN_SECRET)
+		const blog = new Blog({ title, author, url, likes, user })
 
-				const user = await User.findById(decoded.id)
+		user.blogs = [...user.blogs, blog]
 
-				const blog = new Blog({ title, author, url, likes, user })
+		const savedBlog = await blog.save()
+		await user.save()
 
-				user.blogs = [...user.blogs, blog]
-
-				const savedBlog = await blog.save()
-				await user.save()
-
-				res.status(201)
-				res.json(savedBlog)
-			} catch (error) {
-				res.status(401)
-				res.json({ message: 'Invalid token' })
-			}
-		}
+		res.status(201)
+		res.json(savedBlog)
 	} catch (error) {
-		res.status(400)
+		res.status(401)
 		next(error)
 	}
 }
