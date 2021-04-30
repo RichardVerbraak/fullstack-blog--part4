@@ -19,7 +19,7 @@ const addNewBlog = async (req, res, next) => {
 
 		const blog = new Blog({ title, author, url, likes, user })
 
-		user.blogs = user.blogs.concat(blog.id)
+		user.blogs = [...user.blogs, blog]
 
 		const savedBlog = await blog.save()
 		await user.save()
