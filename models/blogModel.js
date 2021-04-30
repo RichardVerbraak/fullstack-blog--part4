@@ -5,6 +5,10 @@ const blogSchema = new mongoose.Schema({
 	author: String,
 	url: { type: String, required: true },
 	likes: { type: Number, default: 0 },
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+	},
 })
 
 // Returned object being the object send back as a response from mongoDB
@@ -12,6 +16,7 @@ blogSchema.set('toJSON', {
 	transform: (document, returnedObject) => {
 		returnedObject.id = returnedObject._id
 		delete returnedObject._id
+		delete returnedObject.__v
 	},
 })
 

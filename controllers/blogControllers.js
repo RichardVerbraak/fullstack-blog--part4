@@ -1,19 +1,31 @@
 const Blog = require('../models/blogModel')
+const User = require('../models/userModel')
 
 const getAllBlogs = async (req, res) => {
-	const blogs = await Blog.find({})
+	const blogs = await Blog.find({}).populate('user', {
+		username: 1,
+		name: 1,
+		id: 1,
+	})
 
 	res.send(blogs)
 }
 
 const addNewBlog = async (req, res, next) => {
-	const { title, author, url, likes } = req.body
-
-	const blog = new Blog({ title, author, url, likes })
-
 	try {
-		await blog.save()
-		res.status(201).json(blog)
+		const { title, author, url, likes } = req.body
+
+		const user = await User.findOne()
+
+		const blog = new Blog({ title, author, url, likes, user })
+
+		user.blogs = user.blogs.concat(blog.id)
+
+		const savedBlog = await blog.save()
+		await user.save()
+
+		res.status(201)
+		res.json(savedBlog)
 	} catch (error) {
 		res.status(400)
 		next(error)
