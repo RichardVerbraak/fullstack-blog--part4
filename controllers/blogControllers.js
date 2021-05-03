@@ -1,3 +1,4 @@
+const e = require('cors')
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blogModel')
 const User = require('../models/userModel')
@@ -35,18 +36,29 @@ const addNewBlog = async (req, res, next) => {
 }
 
 const deleteBlog = async (req, res, next) => {
-	const id = req.params.id
-
 	try {
-		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
-
-		const user = await User.findById(decoded.id)
+		const id = req.params.id
 
 		const blog = await Blog.findById(id)
-		console.log(blog)
 
-		res.status(204)
-		res.json({ message: 'Blog deleted' })
+		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
+
+		// Check if the user that created the blog is the same as the token holder
+		if (decoded.id === blog.user.toString()) {
+			const user = await User.findById(decoded.id)
+
+			user.blogs = user.blogs.filter((blog) => {
+				return blog.toString() !== id
+			})
+
+			await user.save()
+
+			res.status(204)
+			res.send({ message: 'Blog deleted' })
+		} else {
+			res.status(400)
+			res.send({ message: 'Not authorized' })
+		}
 	} catch (error) {
 		res.status(400)
 		next(error)
