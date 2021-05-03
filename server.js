@@ -7,6 +7,7 @@ const blogRoutes = require('./routes/blogRoutes')
 const userRoutes = require('./routes/userRoutes')
 const errorHandler = require('./middleware/errorMiddleware')
 const tokenExtractor = require('./middleware/tokenMiddleware')
+const userExtractor = require('./middleware/userMiddleware')
 
 const app = express()
 
@@ -18,7 +19,8 @@ app.use(cors())
 app.use(express.json())
 
 app.use(tokenExtractor)
-app.use('/api/blogs', blogRoutes)
+
+app.use('/api/blogs', userExtractor, blogRoutes)
 app.use('/api/users', userRoutes)
 
 app.use(errorHandler)

@@ -18,9 +18,7 @@ const addNewBlog = async (req, res, next) => {
 	try {
 		const { title, author, url, likes, user } = req.body
 
-		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
-
-		const foundUser = await User.findById(decoded.id)
+		const foundUser = req.user
 
 		const blog = await Blog.create({ title, author, url, likes, user })
 
@@ -41,23 +39,24 @@ const deleteBlog = async (req, res, next) => {
 
 		const blog = await Blog.findById(id)
 
+		const user = req.user
+
 		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
 
 		// Check if the user that created the blog is the same as the token holder
 		if (decoded.id === blog.user.toString()) {
-			const user = await User.findById(decoded.id)
-
+			// Delete blog from the user
 			user.blogs = user.blogs.filter((blog) => {
 				return blog.toString() !== id
 			})
 
 			await user.save()
 
-			res.status(204)
-			res.send({ message: 'Blog deleted' })
+			res.status(200)
+			res.json({ message: 'Blog deleted' })
 		} else {
 			res.status(400)
-			res.send({ message: 'Not authorized' })
+			res.json({ message: 'Not authorized' })
 		}
 	} catch (error) {
 		res.status(400)
