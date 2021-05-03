@@ -15,21 +15,19 @@ const getAllBlogs = async (req, res) => {
 // Could refactor the authentication process into it's own middleware
 const addNewBlog = async (req, res, next) => {
 	try {
-		const { title, author, url, likes } = req.body
+		const { title, author, url, likes, user } = req.body
 
 		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
 
-		const user = await User.findById(decoded.id)
+		const foundUser = await User.findById(decoded.id)
 
-		const blog = new Blog({ title, author, url, likes, user })
+		const blog = await Blog.create({ title, author, url, likes, user })
 
-		user.blogs = [...user.blogs, blog]
-
-		const savedBlog = await blog.save()
-		await user.save()
+		foundUser.blogs = [...foundUser.blogs, blog._id]
+		await foundUser.save()
 
 		res.status(201)
-		res.json(savedBlog)
+		res.send(blog)
 	} catch (error) {
 		res.status(401)
 		next(error)
@@ -40,9 +38,15 @@ const deleteBlog = async (req, res, next) => {
 	const id = req.params.id
 
 	try {
-		const deletedBlog = await Blog.findByIdAndDelete(id)
+		const decoded = jwt.verify(req.token, process.env.TOKEN_SECRET)
+
+		const user = await User.findById(decoded.id)
+
+		const blog = await Blog.findById(id)
+		console.log(blog)
+
 		res.status(204)
-		res.send(deletedBlog)
+		res.json({ message: 'Blog deleted' })
 	} catch (error) {
 		res.status(400)
 		next(error)
