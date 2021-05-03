@@ -55,40 +55,42 @@ describe('MongoDB blog(s)', () => {
 	})
 })
 
-test('Adds a new blog to MongoDB', async () => {
-	const newBlog = {
-		title: 'Season of Storms',
-		author: 'Andrzej Sapkowski',
-		url: 'something.something.com',
-		likes: 3,
-	}
+describe('Adding a new blog', () => {
+	test('that is correctly formatted to MongoDB', async () => {
+		const newBlog = {
+			title: 'Season of Storms',
+			author: 'Andrzej Sapkowski',
+			url: 'something.something.com',
+			likes: 3,
+		}
 
-	await api.post('/api/blogs').send(newBlog).expect(201)
+		await api.post('/api/blogs').send(newBlog).expect(201)
 
-	const res = await api.get('/api/blogs')
-	expect(res.body).toHaveLength(4)
-})
+		const res = await api.get('/api/blogs')
+		expect(res.body).toHaveLength(4)
+	})
 
-test('if the likes prop defaults to 0 when missing', async () => {
-	const newBlog = {
-		title: 'Blood of Elves',
-		author: 'Andrzej Sapkowski',
-		url: 'something.something.com',
-	}
+	test('without likes so it defaults to 0', async () => {
+		const newBlog = {
+			title: 'Blood of Elves',
+			author: 'Andrzej Sapkowski',
+			url: 'something.something.com',
+		}
 
-	await api.post('/api/blogs').send(newBlog)
+		await api.post('/api/blogs').send(newBlog)
 
-	const res = await api.get('/api/blogs')
-	expect(res.body[3].likes).toBe(0)
-})
+		const res = await api.get('/api/blogs')
+		expect(res.body[3].likes).toBe(0)
+	})
 
-test('for 400 Bad Request when title and url props are missing', async () => {
-	const newBlog = {
-		author: 'Andrzej Sapkowski',
-		likes: 23,
-	}
+	test('and checking for a 400 error when title and url props are missing', async () => {
+		const newBlog = {
+			author: 'Andrzej Sapkowski',
+			likes: 23,
+		}
 
-	await api.post('/api/blogs').send(newBlog).expect(400)
+		await api.post('/api/blogs').send(newBlog).expect(400)
+	})
 })
 
 test('dummy returns one', () => {
