@@ -1,8 +1,10 @@
 const app = require('../server')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
 const Blog = require('../models/blogModel')
+const User = require('../models/userModel')
 const { dummy, totalLikes, favoriteBlog } = require('../utils/list_helper')
 
 const api = supertest(app)
@@ -31,6 +33,7 @@ const blogs = [
 beforeEach(async () => {
 	// Delete previous documents
 	await Blog.deleteMany({})
+	await User.deleteMany({})
 
 	// Add seeder data to test
 	await Blog.insertMany(blogs)
@@ -57,6 +60,22 @@ describe('MongoDB blog(s)', () => {
 
 describe('Adding a new blog', () => {
 	test('that is correctly formatted to MongoDB', async () => {
+		const newUser = {
+			username: 'Johnny',
+			name: 'Johnny Test',
+			password: 'test123',
+		}
+
+		const user = await User.create(newUser)
+
+		// Login user
+		const response = await api
+			.post('/api/users/login')
+			.send({ username: newUser.username, password: newUser.password })
+
+		// Set a token
+		const token = response.body.token
+
 		const newBlog = {
 			title: 'Season of Storms',
 			author: 'Andrzej Sapkowski',
@@ -64,7 +83,11 @@ describe('Adding a new blog', () => {
 			likes: 3,
 		}
 
-		await api.post('/api/blogs').send(newBlog).expect(201)
+		await api
+			.post('/api/blogs')
+			.set('Authorization', `Bearer ${token}`)
+			.send(newBlog)
+			.expect(201)
 
 		const res = await api.get('/api/blogs')
 		expect(res.body).toHaveLength(4)
