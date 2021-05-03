@@ -69,12 +69,12 @@ describe('Adding a new blog', () => {
 		const user = await User.create(newUser)
 
 		// Login user
-		const response = await api
+		const loginResponse = await api
 			.post('/api/users/login')
 			.send({ username: newUser.username, password: newUser.password })
 
 		// Set a token
-		const token = response.body.token
+		const token = loginResponse.body.token
 
 		const newBlog = {
 			title: 'Season of Storms',
@@ -106,13 +106,33 @@ describe('Adding a new blog', () => {
 		expect(res.body[3].likes).toBe(0)
 	})
 
-	test('and checking for a 400 error when title and url props are missing', async () => {
+	test('and checking for a 401 error when title and url props are missing', async () => {
+		const newUser = {
+			username: 'Johnny',
+			name: 'Johnny Test',
+			password: 'test123',
+		}
+
+		const user = await User.create(newUser)
+
+		// Login user
+		const loginResponse = await api
+			.post('/api/users/login')
+			.send({ username: newUser.username, password: newUser.password })
+
+		// Set a token
+		const token = loginResponse.body.token
+
 		const newBlog = {
 			author: 'Andrzej Sapkowski',
 			likes: 23,
 		}
 
-		await api.post('/api/blogs').send(newBlog).expect(400)
+		await api
+			.post('/api/blogs')
+			.set('Authorization', `Bearer ${token}`)
+			.send(newBlog)
+			.expect(401)
 	})
 })
 
