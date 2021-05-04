@@ -18,50 +18,37 @@ const favoriteBlog = (blogs) => {
 	return Math.max(...likesArray)
 }
 
-// !!!Completing later
-// const mostBlogs = () => {
-// 	const blogs = [
-// 		{
-// 			title: 'At the Mountains of Madness',
-// 			author: 'H.P. Lovecraft',
-// 			url: 'something.something.com',
-// 			likes: 4,
-// 		},
-// 		{
-// 			title: 'Dagon',
-// 			author: 'H.P. Lovecraft',
-// 			url: 'something.something.com',
-// 			likes: 6,
-// 		},
-// 		{
-// 			title: 'Baptism of Fire',
-// 			author: 'Andrzej Sapkowski',
-// 			url: 'something.something.com',
-// 			likes: 10,
-// 		},
-// 	]
+const mostBlogs = () => {
+	const blogs = [
+		{
+			title: 'At the Mountains of Madness',
+			author: 'H.P. Lovecraft',
+			url: 'something.something.com',
+			likes: 4,
+		},
+		{
+			title: 'Dagon',
+			author: 'H.P. Lovecraft',
+			url: 'something.something.com',
+			likes: 6,
+		},
+		{
+			title: 'Baptism of Fire',
+			author: 'Andrzej Sapkowski',
+			url: 'something.something.com',
+			likes: 10,
+		},
+	]
 
-// 	// Count the amount of times a author shows up
-// 	// if blogs.author === blogs.author  count +1
-// 	// const authorArray = blogs.map((blog) => {
-// 	// 	return blog.author
-// 	// })
-// 	// // console.log(authorArray)
+	const authorArray = blogs.map((blog) => {
+		return blog.author
+	})
 
-// 	const test = blogs.reduce((obj, currentBlog) => {
+	const max = _.countBy(authorArray)
 
-// 		obj[currentBlog.author] = ++obj[currentBlog.author] || 1
-// 		return obj
-// 	}, {})
+	console.log(max)
+}
 
-// 	// const test = _.countBy(blogs, 'author')
-
-// 	// const what = Object.keys(test).reduce((a, b) => {
-// 	// 	return test[a] > test[b] ? test : test
-// 	// })
-
-// 	// console.log(Object.keys(test))
-// 	// console.log(test)
-// }
+mostBlogs()
 
 module.exports = { dummy, totalLikes, favoriteBlog }
